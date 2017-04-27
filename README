@@ -1,12 +1,95 @@
 Git repo for system programming cohort 2017 team 3 project work
 
+Build:
+make all
+
+Use:
+./server
+./client <ip> <group-id> <message>
+
+press Ctrl+C to exit server
+
 Example:
 
+Client:
+sgr@ubuntu:~/sgr/sysprog-team3$ ./client 127.0.0.1 0 "message from client"
+sgr@ubuntu:~/sgr/sysprog-team3$ ./client 127.0.0.1 0 "message from client1"
+sgr@ubuntu:~/sgr/sysprog-team3$ ./client 127.0.0.1 10 "message from client"
+sgr@ubuntu:~/sgr/sysprog-team3$ ./client 127.0.0.1 10 "message from client1"
+sgr@ubuntu:~/sgr/sysprog-team3$ ./client 127.0.0.1 3 "message from client"
+sgr@ubuntu:~/sgr/sysprog-team3$ ./client 127.0.0.1 3 "message from client1"
+
 Server:
-sgr@ubuntu:~/sgr/sysprog-team3$ ./server 
+gr@ubuntu:~/sgr/sysprog-team3$ ./server 
 SERVER started at port: 5000
 
-Client:
-sgr@ubuntu:~/sgr/sysprog-team3$ ./client 127.0.0.1
-Response from server: Thu Apr 27 00:21:22 2017
+
+
+================================================================
+MESSAGES UPDATE
+================================================================
+GROUP: 0
+	1: message from client
+
+
+
+================================================================
+MESSAGES UPDATE
+================================================================
+GROUP: 0
+	1: message from client
+	2: message from client1
+
+
+
+================================================================
+MESSAGES UPDATE
+================================================================
+GROUP: 0
+	1: message from client
+	2: message from client1
+GROUP: 10
+	1: message from client
+
+
+
+================================================================
+MESSAGES UPDATE
+================================================================
+GROUP: 0
+	1: message from client
+	2: message from client1
+GROUP: 10
+	1: message from client
+	2: message from client1
+
+
+
+================================================================
+MESSAGES UPDATE
+================================================================
+GROUP: 0
+	1: message from client
+	2: message from client1
+GROUP: 3
+	1: message from client
+GROUP: 10
+	1: message from client
+	2: message from client1
+
+
+
+================================================================
+MESSAGES UPDATE
+================================================================
+GROUP: 0
+	1: message from client
+	2: message from client1
+GROUP: 3
+	1: message from client
+	2: message from client1
+GROUP: 10
+	1: message from client
+	2: message from client1
+
 
