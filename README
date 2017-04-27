@@ -1,1 +1,12 @@
 Git repo for system programming cohort 2017 team 3 project work
+
+Example:
+
+Server:
+sgr@ubuntu:~/sgr/sysprog-team3$ ./server 
+SERVER started at port: 5000
+
+Client:
+sgr@ubuntu:~/sgr/sysprog-team3$ ./client 127.0.0.1
+Response from server: Thu Apr 27 00:21:22 2017
+
