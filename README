@@ -90,6 +90,6 @@ GROUP: 3
 	2: message from client1
 GROUP: 10
 	1: message from client
-	2: message from client1
+	2: message from client2
 
 
