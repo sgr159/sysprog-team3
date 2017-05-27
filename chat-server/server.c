@@ -18,6 +18,7 @@
  * <sys/queue.h>, but for portability we'll include the local copy. */
 #include "queue.h"
 #include "constants.h"
+#include "std_defs.h"
 
 /* Libevent. */
 #include <event2/event.h>
@@ -31,30 +32,11 @@
 static struct event_base *evbase;
 
 /**
- * A struct for client specific data.
- *
- * This also includes the tailq entry item so this struct can become a
- * member of a tailq - the linked list of all connected clients.
- */
-struct client {
-	/* The clients socket. */
-	int fd;
-
-	/* The bufferedevent for this client. */
-	struct bufferevent *buf_ev;
-
-	/*
-	 * This holds the pointers to the next and previous entries in
-	 * the tail queue.
-	 */
-	TAILQ_ENTRY(client) entries;
-};
-
-/**
  * The head of our tailq of all connected clients.  This is what will
  * be iterated to send a received message to all connected clients.
  */
 TAILQ_HEAD(, client) client_tailq_head;
+
 
 /**
  * Set a socket to non-blocking mode.
@@ -80,27 +62,28 @@ setnonblock(int fd)
 void
 buffered_on_read(struct bufferevent *bev, void *arg)
 {
-	struct client *this_client = arg;
-	struct client *client;
 	uint8_t data[8192];
 	size_t n;
 
-	/* Read 8k at a time and send it to all connected clients. */
-	for (;;) {
-		n = bufferevent_read(bev, data, sizeof(data));
-		if (n <= 0) {
-			/* Done. */
-			break;
-		}
-		
-		/* Send data to all connected clients except for the
-		 * client that sent the data. */
-		TAILQ_FOREACH(client, &client_tailq_head, entries) {
-			if (client != this_client) {
-				bufferevent_write(client->buf_ev, data,  n);
-			}
-		}
+	n = bufferevent_read(bev, data, sizeof(data));
+	if (n <= 0) {
+		/* Done. */
+		printf("n <=0 in %s",__FUNCTION__);
+		return;
 	}
+	pkt_t * inpkt = (pkt_t *) data;
+
+#undef _
+#define _(V,v)											\
+	case V:											\
+	v##_handler((v##_pkt_t *) &(inpkt->u.v##_pkt),arg);					\
+	break;
+	
+	switch(inpkt->type)
+	{
+		foreach_server_pkt_type
+	}
+	//bufferevent_write(client->buf_ev, "order ack!",  n);
 
 }
 
@@ -157,6 +140,7 @@ on_accept(int fd, short ev, void *arg)
 	if (client == NULL)
 		err(1, "malloc failed");
 	client->fd = client_fd;
+	client->is_cook = 0;
 
 	client->buf_ev = bufferevent_socket_new(evbase, client_fd, 0);
 	bufferevent_setcb(client->buf_ev, buffered_on_read, NULL,

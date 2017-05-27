@@ -1,4 +1,32 @@
+#ifndef STD_DEF_HEADER_SYSPROG
+#define STD_DEF_HEADER_SYSPROG
+
 #include <stdint.h>
+#include "queue.h"
+
+
+/**
+ * A struct for client specific data.
+ *
+ * This also includes the tailq entry item so this struct can become a
+ * member of a tailq - the linked list of all connected clients.
+ */
+struct client {
+	/* The clients socket. */
+	int fd;
+	int is_cook;
+	/* The bufferedevent for this client. */
+	struct bufferevent *buf_ev;
+	/* The bufferedevent for assigned client. */
+	struct bufferevent *buf_ev_cust;
+
+	/*
+	 * This holds the pointers to the next and previous entries in
+	 * the tail queue.
+	 */
+	TAILQ_ENTRY(client) entries;
+};
+
 /*
  * register all types of packets here
  */
@@ -9,6 +37,27 @@
 	_(COOK_ORDER,cook_order)			\
 	_(CUST_UPDATE,cust_update)			\
 	_(COOK_UPDATE,cook_update)		
+
+/*
+ * register all types of packets handled by server here
+ */
+#define foreach_server_pkt_type				\
+	_(REG_COOK,reg_cook)				\
+	_(REG_CUSTOMER,reg_customer)			\
+	_(CUST_ORDER,cust_order)			\
+	_(COOK_UPDATE,cook_update)		
+
+/*
+ * register all types of packets handled by cook here
+ */
+#define foreach_cook_pkt_type				\
+	_(COOK_ORDER,cook_order)			
+
+/*
+ * register all types of packets handled by client here
+ */
+#define foreach_client_pkt_type				\
+	_(CUST_UPDATE,cust_update)			
 
 #define foreach_order_type				\
 	_(BIRYANI)					\
@@ -37,6 +86,7 @@ typedef enum pkt_type pkt_type;
  */
 enum order_type
 {
+	NONE=0,
 	foreach_order_type
 };
 
@@ -50,8 +100,8 @@ typedef enum order_type order_type;
  */
 struct reg_cook_pkt_t
 {
-	int8_t first_name[32];
-	int8_t last_name[32];
+	char first_name[32];
+	char last_name[32];
 	//array of entries suggesting what dishes the cook can make
 	uint8_t capability[32];
 };
@@ -61,8 +111,8 @@ struct reg_cook_pkt_t
  */
 struct reg_customer_pkt_t
 {
-	int8_t first_name[32];
-	int8_t last_name[32];
+	char first_name[32];
+	char last_name[32];
 };
 
 /*
@@ -86,6 +136,7 @@ struct cook_order_pkt_t
  */
 struct cook_update_pkt_t
 {
+	char message[32];
 	uint8_t orders_success[32];
 	uint8_t orders_failed[32];
 };
@@ -95,6 +146,7 @@ struct cook_update_pkt_t
  */
 struct cust_update_pkt_t
 {
+	char message[32];
 	uint8_t orders_success[32];
 	uint8_t orders_failed[32];
 };
@@ -113,9 +165,21 @@ foreach_pkt_type
 /*
  * packet structure which will be passed around
  */
-struct pkt
+struct pkt_t
 {
 	//type of the packet. not making it pkt_type to keep it portable
-	uint32_t type;
+	uint16_t type;
+	uint16_t size;
 	union data {foreach_pkt_type} u;
 };
+typedef struct pkt_t pkt_t;
+
+/*
+ * handler function declarations
+ */
+
+#undef _
+#define _(V,v) int v##_handler(v##_pkt_t * pkt_data, void * arg);
+foreach_pkt_type
+
+#endif
