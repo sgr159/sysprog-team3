@@ -1,27 +1,19 @@
-A simple chat server using libevent.
--------------------------------------------------------------------------------
+BUILD:
+make all
 
-Requires libevent 2.0+.
+Usage:
 
-First you must download and build libevent, you do not need to install
-it.  
+run server:
+./server
 
-    libevent homepage: http://www.monkey.org/~provos/libevent/
+run client:
+./client 127.0.0.1
 
-To build libevent_echosrv:
+run cook-client
+./cook-client 127.0.0.1
 
-    LIBEVENT=~/src/libevent-2.0.12-stable make
-
-where LIBEVENT points to the location of your built libevent.
-
-USAGE
-
-    Run the server:
-
-        ./chat-server
-
-    Then telnet to localhost port 5555 from multiple terminals.
-    Anything you type in one terminal will be sent to the other
-    connected terminals.
-
---
+run cook clients first,
+run client, order the food.
+the server will find an avaiable cook.
+the cook will get the order. Will respond on the prompt with a message when he is done making the order.
+the message will be relayed to the customer and the cook will become free for other orders.
