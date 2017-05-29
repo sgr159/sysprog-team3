@@ -17,11 +17,6 @@
 int main(int argc, char *argv[])
 {
     int sockfd = 0;
-<<<<<<< HEAD
-=======
-    char recvBuff[MAX_CLNT_RECV_BUF_SIZE];
-    char sendBuff[MAX_CLNT_SEND_BUF_SIZE];
->>>>>>> 595059568cc910e5d58ece001740928fb246b499
     struct sockaddr_in serv_addr; 
 
     if(argc != 2)
@@ -30,11 +25,6 @@ int main(int argc, char *argv[])
         return 1;
     } 
 
-<<<<<<< HEAD
-=======
-    memset(recvBuff, '0',sizeof(recvBuff));
-    memset(sendBuff, '0',sizeof(sendBuff));
->>>>>>> 595059568cc910e5d58ece001740928fb246b499
     if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Error : Could not create socket \n");
