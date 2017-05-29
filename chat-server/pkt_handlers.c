@@ -86,5 +86,6 @@ int cook_update_handler(cook_update_pkt_t * pkt_data, void * arg)
 	outpkt.size = sizeof(update_pkt);
 	outpkt.u.cust_update_pkt = update_pkt;
 	bufferevent_write(client->buf_ev_cust, &outpkt,  sizeof(outpkt));
+	client->is_cook=1;
 	return 0;
 }
