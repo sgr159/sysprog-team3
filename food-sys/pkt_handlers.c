@@ -11,18 +11,20 @@
 extern TAILQ_HEAD(, client) client_tailq_head;
 #endif
 
-int reg_cook_handler(reg_cook_pkt_t * pkt_data, void * arg)
+PKT_HNDL_FUNC(reg_cook)
 {
 	struct client * client = (struct client *) arg;
 	client->is_cook = 1;
 	printf("cook %s %s registered!\n",pkt_data->first_name, pkt_data->last_name);
 	return 0;
 }
-int reg_customer_handler(reg_customer_pkt_t * pkt_data, void * arg)
+
+PKT_HNDL_FUNC(reg_customer)
 {
 	return 0;
 }
-int cust_order_handler(cust_order_pkt_t * pkt_data, void * arg)
+
+PKT_HNDL_FUNC(cust_order)
 {
 #ifdef SERVER
 	struct client * client = (struct client *) arg;
@@ -54,7 +56,8 @@ int cust_order_handler(cust_order_pkt_t * pkt_data, void * arg)
 #endif
 	return 0;
 }
-int cook_order_handler(cook_order_pkt_t * pkt_data, void * arg)
+
+PKT_HNDL_FUNC(cook_order)
 {
 	int sockfd = *(int *)(arg);
 	struct pkt_t pkt; 
@@ -71,12 +74,14 @@ int cook_order_handler(cook_order_pkt_t * pkt_data, void * arg)
 	write(sockfd, &pkt, sizeof(pkt_t));
 	return 0;
 }
-int cust_update_handler(cust_update_pkt_t * pkt_data, void * arg)
+
+PKT_HNDL_FUNC(cust_update)
 {
 	printf("Message for you: %s\n",pkt_data->message);
 	return 0;
 }
-int cook_update_handler(cook_update_pkt_t * pkt_data, void * arg)
+
+PKT_HNDL_FUNC(cook_update)
 {
 	struct client * client = (struct client *) arg;
 	struct pkt_t outpkt;
@@ -86,6 +91,6 @@ int cook_update_handler(cook_update_pkt_t * pkt_data, void * arg)
 	outpkt.size = sizeof(update_pkt);
 	outpkt.u.cust_update_pkt = update_pkt;
 	bufferevent_write(client->buf_ev_cust, &outpkt,  sizeof(outpkt));
-	client->is_cook=1;
+	client->is_cook = 1;
 	return 0;
 }

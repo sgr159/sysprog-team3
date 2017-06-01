@@ -178,8 +178,10 @@ typedef struct pkt_t pkt_t;
  * handler function declarations
  */
 
+#define PKT_HNDL_FUNC(type) int type##_handler(type##_pkt_t * pkt_data, void * arg)
 #undef _
-#define _(V,v) int v##_handler(v##_pkt_t * pkt_data, void * arg);
+
+#define _(V,v) PKT_HNDL_FUNC(v);
 foreach_pkt_type
 
 #endif
