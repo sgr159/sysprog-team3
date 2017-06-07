@@ -5,11 +5,11 @@ LIBS =		$(LIBEVENT)/.libs/libevent.a -lrt
 
 all: server cook-client client
 
-server: server.c pkt_handlers.c
-	$(CC) $(CFLAGS) -o $@ $^ $(LIBS) -DSERVER=1
+server: server.c pkt_handlers.c logging.c
+	$(CC) $(CFLAGS) -g -o $@ $^ $(LIBS) -DSERVER=1
 client: client.c pkt_handlers.c
-	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+	$(CC) $(CFLAGS) -g -o $@ $^ $(LIBS)
 cook-client: cook-client.c pkt_handlers.c
-	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+	$(CC) $(CFLAGS) -g -o $@ $^ $(LIBS)
 clean:
 	rm -f chat-server cook-client server client *~

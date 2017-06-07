@@ -47,11 +47,59 @@ int main(int argc, char *argv[])
        printf("\n Error : Connect Failed \n");
        return 1;
     }
-    
     // send the registration packet
     reg_cook_pkt_t reg_data;
-    strcpy(reg_data.first_name,"abc");
-    strcpy(reg_data.last_name,"xyz");
+/*    printf("Enter first name: ");
+    fgets(reg_data.first_name,sizeof(reg_data.first_name),stdin);
+    char *pos = NULL;
+    if ((pos=strchr(reg_data.first_name, '\n')) != NULL)
+	*pos = '\0';
+    printf("\n");
+    printf("Enter last name: ");
+    fgets(reg_data.last_name,sizeof(reg_data.first_name),stdin);
+    pos = NULL;
+    if ((pos=strchr(reg_data.last_name, '\n')) != NULL)
+	*pos = '\0';
+    printf("\n");
+    */
+/*
+ * print the menu
+ */
+int max_num_orders = 1;
+#undef _
+#define _(V)					\
+    printf("%d : "#V,max_num_orders++);			\
+    printf("\n");
+
+    foreach_order_type
+    
+    int n =0;
+    char order[64];
+    char order_tok[64];
+    char *tok;
+    printf("Enter the numbers next to the items you can provide separated by spaces: ");
+
+renter_items:
+    memset(order,'\0',sizeof(order));
+    memset(reg_data.capability,UNKNOWN,sizeof(reg_data));
+    fgets (order, sizeof(order)-1, stdin);
+    char *pos = NULL;
+    if ((pos=strchr(order, '\n')) != NULL)
+	*pos = '\0';
+    strcpy(order_tok,order);
+    tok = strtok(order_tok," ");
+    while(tok!=NULL)
+    {
+	    int order = atoi(tok);
+	    if(order == 0 || order >= max_num_orders)
+	    {
+		    printf ("Invalid item %s, \nrenter your items:",tok);
+		    goto renter_items;
+	    }
+	    reg_data.capability[(uint8_t) order] = CAPABLE;
+	    tok=strtok(NULL," ");
+    }
+
     pkt_t pkt;
     pkt.type = REG_COOK;
     pkt.size = sizeof(reg_data);
@@ -60,7 +108,13 @@ int main(int argc, char *argv[])
 wait_for_order:
     memset(&pkt,0,sizeof(pkt_t));
     printf("WELCOME! Please stand by as we find a customer for you\n");
-    read(sockfd,&pkt,sizeof(pkt_t));
+    n = read(sockfd,&pkt,sizeof(pkt_t));
+    if(n<=0)
+    {
+        printf("\n error on read, exiting\n");
+	return -1;
+
+    }
 #undef _
 #define _(V,v)											\
 	case V:											\

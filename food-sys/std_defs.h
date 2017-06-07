@@ -4,29 +4,10 @@
 #include <stdint.h>
 #include "queue.h"
 
-
-/**
- * A struct for client specific data.
- *
- * This also includes the tailq entry item so this struct can become a
- * member of a tailq - the linked list of all connected clients.
- */
-struct client {
-	/* The clients socket. */
-	int fd;
-	int is_cook;
-	/* The bufferedevent for this client. */
-	struct bufferevent *buf_ev;
-	/* The bufferedevent for assigned client. */
-	struct bufferevent *buf_ev_cust;
-
-	/*
-	 * This holds the pointers to the next and previous entries in
-	 * the tail queue.
-	 */
-	TAILQ_ENTRY(client) entries;
-};
-
+#define MAX_MENU_ITEMS 10
+#define ORDER_UNSERV_MESSAGE "None of your orders are serviceable right now"
+#define ORDER_COMPLETE_MESSAGE "All orders processed, Enjoy your meal!"
+#define MENU_ARR_SIZE ((MAX_MENU_ITEMS/32)+1)*32
 /*
  * register all types of packets here
  */
@@ -63,7 +44,20 @@ struct client {
 	_(BIRYANI)					\
 	_(DOSA)						\
 	_(VEG_CURRY)					\
-	_(RICE)						\
+	_(RICE)						
+
+
+#define foreach_user_states				\
+	_(UNKNOWN)					\
+	_(CUSTOMER)					\
+	_(COOK_FREE)					\
+	_(COOK_BUSY)					
+
+#define foreach_menu_states				\
+	_(CAPABLE)					\
+	_(NEW)						\
+	_(ASSIGNED)					\
+	_(COMPLETED)					
 
 #undef _
 #define _(V,v) V,
@@ -92,6 +86,21 @@ enum order_type
 
 typedef enum order_type order_type;
 
+enum user_state
+{
+	foreach_user_states
+};
+
+typedef enum user_state user_state;
+
+enum menu_state
+{
+	UNDEFINED=0,
+	foreach_menu_states
+};
+
+typedef enum menu_state menu_state;
+
 /*
  * define all packet types
  */
@@ -103,7 +112,7 @@ struct reg_cook_pkt_t
 	char first_name[32];
 	char last_name[32];
 	//array of entries suggesting what dishes the cook can make
-	uint8_t capability[32];
+	uint8_t capability[MENU_ARR_SIZE];
 };
 
 /*
@@ -120,7 +129,7 @@ struct reg_customer_pkt_t
  */
 struct cust_order_pkt_t
 {
-	uint8_t orders[32];
+	uint8_t orders[MENU_ARR_SIZE];
 };
 
 /*
@@ -128,7 +137,7 @@ struct cust_order_pkt_t
  */
 struct cook_order_pkt_t
 {
-	uint8_t orders[32];
+	uint8_t orders[MENU_ARR_SIZE];
 };
 
 /*
@@ -137,8 +146,8 @@ struct cook_order_pkt_t
 struct cook_update_pkt_t
 {
 	char message[32];
-	uint8_t orders_success[32];
-	uint8_t orders_failed[32];
+	uint8_t orders_success[MENU_ARR_SIZE];
+	uint8_t orders_failed[MENU_ARR_SIZE];
 };
 
 /*
@@ -146,9 +155,9 @@ struct cook_update_pkt_t
  */
 struct cust_update_pkt_t
 {
-	char message[32];
-	uint8_t orders_success[32];
-	uint8_t orders_failed[32];
+	char message[32*5];
+	uint8_t orders_success[MENU_ARR_SIZE];
+	uint8_t orders_failed[MENU_ARR_SIZE];
 };
 
 /*
@@ -183,5 +192,29 @@ typedef struct pkt_t pkt_t;
 
 #define _(V,v) PKT_HNDL_FUNC(v);
 foreach_pkt_type
+
+typedef struct menu_item menu_item;
+
+/**
+ * A struct for client specific data.
+ *
+ * This also includes the tailq entry item so this struct can become a
+ * member of a tailq - the linked list of all connected clients.
+ */
+struct client {
+	/* The clients socket. */
+	int fd;
+	user_state state;
+	/* The bufferedevent for this client. */
+	struct bufferevent *buf_ev;
+	struct client *assigned_client;
+	menu_state menu_items[32];
+	int num_of_orders;
+	/*
+	 * This holds the pointers to the next and previous entries in
+	 * the tail queue.
+	 */
+	TAILQ_ENTRY(client) entries;
+};
 
 #endif

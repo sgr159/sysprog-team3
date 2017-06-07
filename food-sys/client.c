@@ -64,6 +64,8 @@ int main(int argc, char *argv[])
     char *tok;
     cust_order_pkt_t order_data;
     printf("Enter the numbers next to your choice separated by spaces: ");
+    int i = 0;
+    int retval = 0;
 
 renter_order:
     memset(&order_data,0,sizeof(cust_order_pkt_t));
@@ -72,7 +74,7 @@ renter_order:
     printf("order :%s\n",order);
     strcpy(order_tok,order);
     tok = strtok(order_tok," ");
-    int i = 0;
+    i=0;
     while(tok!=NULL)
     {
 	    int order = atoi(tok);
@@ -92,18 +94,22 @@ renter_order:
     pkt.u.cust_order_pkt = order_data;
     write(sockfd, &pkt, sizeof(pkt_t));
     memset(&pkt,0,sizeof(pkt_t));
+
+read:
     read(sockfd,&pkt,sizeof(pkt_t));
 
 #undef _
 #define _(V,v)											\
 	case V:											\
-	v##_handler((v##_pkt_t *) &(pkt.u.v##_pkt),NULL);					\
+	retval = v##_handler((v##_pkt_t *) &(pkt.u.v##_pkt),NULL);					\
 	break;
 	
 	switch(pkt.type)
 	{
 		foreach_client_pkt_type
 	}
+	if(retval)
+		goto read;
    
     return 0;
 }

@@ -19,6 +19,7 @@
 #include "queue.h"
 #include "constants.h"
 #include "std_defs.h"
+#include "logging.h"
 
 /* Libevent. */
 #include <event2/event.h>
@@ -68,7 +69,7 @@ buffered_on_read(struct bufferevent *bev, void *arg)
 	n = bufferevent_read(bev, data, sizeof(data));
 	if (n <= 0) {
 		/* Done. */
-		printf("n <=0 in %s",__FUNCTION__);
+		LOG(LOG_ERR,"%s","n <=0 in %s");
 		return;
 	}
 	pkt_t * inpkt = (pkt_t *) data;
@@ -77,6 +78,7 @@ buffered_on_read(struct bufferevent *bev, void *arg)
 #define _(V,v)											\
 	case V:											\
 	v##_handler((v##_pkt_t *) &(inpkt->u.v##_pkt),arg);					\
+	LOG(LOG_DEBUG,"%s"#V,"Received packet type: ")						\
 	break;
 	
 	switch(inpkt->type)
@@ -99,10 +101,11 @@ buffered_on_error(struct bufferevent *bev, short what, void *arg)
 	if (what & BEV_EVENT_EOF) {
 		/* Client disconnected, remove the read event and the
 		 * free the client structure. */
-		printf("Client disconnected.\n");
+		//printf("Client disconnected.\n");
+		LOG(LOG_ERR,"%s","Client disconnected.")
 	}
 	else {
-		warn("Client socket error, disconnecting.\n");
+		LOG(LOG_WARNING,"%s","Client socket error, disconnecting.");
 	}
 
 	/* Remove the client from the tailq. */
@@ -140,7 +143,7 @@ on_accept(int fd, short ev, void *arg)
 	if (client == NULL)
 		err(1, "malloc failed");
 	client->fd = client_fd;
-	client->is_cook = 0;
+	client->state = UNKNOWN;
 
 	client->buf_ev = bufferevent_socket_new(evbase, client_fd, 0);
 	bufferevent_setcb(client->buf_ev, buffered_on_read, NULL,
@@ -164,7 +167,7 @@ main(int argc, char **argv)
 	struct sockaddr_in listen_addr;
 	struct event ev_accept;
 	int reuseaddr_on;
-
+	syslog_init();
 	/* Initialize libevent. */
         evbase = event_base_new();
 
