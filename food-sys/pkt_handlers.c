@@ -17,6 +17,7 @@ PKT_HNDL_FUNC(reg_cook)
 	struct client * client = (struct client *) arg;
 	client->state = COOK_FREE;
 	//printf("cook %s %s registered!\n",pkt_data->first_name, pkt_data->last_name);
+	LOG(LOG_INFO,"%s","cook registered")
 	for(int i=0;i<MENU_ARR_SIZE;i++)
 	{
 		if(pkt_data->capability[i] == CAPABLE){
@@ -79,8 +80,10 @@ PKT_HNDL_FUNC(cust_order)
 			outpkt.u.cook_order_pkt = order_pkt;			
 			bufferevent_write(client_item->buf_ev, &outpkt,  sizeof(outpkt));
 			client_item->state = COOK_BUSY;
-			if(client->num_of_orders == orders_assigned)
+			if(client->num_of_orders == orders_assigned){
+				LOG(LOG_INFO,"%s","client orders assigned")
 				break;
+			}
 		}
 	}
 	if(!(client->num_of_orders == orders_assigned)) {
@@ -104,7 +107,7 @@ PKT_HNDL_FUNC(cust_order)
 					"Orders unserviceable currently %s, rest of the orders will be serviced",missed_orders);
 		}
 		
-		LOG(LOG_INFO,"%s",customer_msg)
+		LOG(LOG_INFO,"Order unsuccessful, message sent to client: %s",customer_msg)
 		struct cust_update_pkt_t update_pkt;
 		strncpy(update_pkt.message,customer_msg,sizeof(update_pkt.message));
 		outpkt.type = CUST_UPDATE;
@@ -185,6 +188,7 @@ PKT_HNDL_FUNC(cook_update)
 		outpkt.size = sizeof(update_pkt);
 		outpkt.u.cust_update_pkt = update_pkt;
 		bufferevent_write(client->assigned_client->buf_ev, &outpkt,  sizeof(outpkt));
+		LOG(LOG_INFO,"%s","client orders complete")
 		//TODO: delete client
 	}
 	client->state = COOK_FREE;

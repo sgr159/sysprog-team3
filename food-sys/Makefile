@@ -7,9 +7,9 @@ all: server cook-client client
 
 server: server.c pkt_handlers.c logging.c
 	$(CC) $(CFLAGS) -g -o $@ $^ $(LIBS) -DSERVER=1
-client: client.c pkt_handlers.c
+client: client.c pkt_handlers.c logging.c
 	$(CC) $(CFLAGS) -g -o $@ $^ $(LIBS)
-cook-client: cook-client.c pkt_handlers.c
+cook-client: cook-client.c pkt_handlers.c logging.c
 	$(CC) $(CFLAGS) -g -o $@ $^ $(LIBS)
 clean:
 	rm -f chat-server cook-client server client *~

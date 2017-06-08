@@ -110,6 +110,6 @@ read:
 	}
 	if(retval)
 		goto read;
-   
+    close(sockfd);
     return 0;
 }

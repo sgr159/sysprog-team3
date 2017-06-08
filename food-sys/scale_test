@@ -1,0 +1,35 @@
+ON SERVER:
+server: accept failed: Too many open files
+server: accept failed: Too many open files
+server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 1015
+server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1016
+pkt_handlers.c:53:cust_order_handler(): received order 1
+server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 1015
+server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 1014
+server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 1013
+server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 1012
+
+
+
+ON TEST SCRIPT:
+num of clients  1014
+num of clients  1016
+num of clients  1018
+Traceback (most recent call last):
+  File "test.py", line 7, in <module>
+    cons_cook = pexpect.spawn("./cook-client 127.0.0.1")
+  File "/usr/lib/python3/dist-packages/pexpect/pty_spawn.py", line 194, in __init__
+    self._spawn(command, args, preexec_fn, dimensions)
+  File "/usr/lib/python3/dist-packages/pexpect/pty_spawn.py", line 289, in _spawn
+    cwd=self.cwd, **kwargs)
+  File "/usr/lib/python3/dist-packages/ptyprocess/ptyprocess.py", line 220, in spawn
+    pid, fd = pty.fork()
+  File "/usr/lib/python3.5/pty.py", line 96, in fork
+    master_fd, slave_fd = openpty()
+  File "/usr/lib/python3.5/pty.py", line 29, in openpty
+    master_fd, slave_name = _open_terminal()
+  File "/usr/lib/python3.5/pty.py", line 59, in _open_terminal
+    raise OSError('out of pty devices')
+OSError: out of pty devices
+

@@ -32,6 +32,8 @@
  * API. */
 static struct event_base *evbase;
 
+static int num_of_active_conn = 0;
+
 /**
  * The head of our tailq of all connected clients.  This is what will
  * be iterated to send a received message to all connected clients.
@@ -98,14 +100,15 @@ buffered_on_error(struct bufferevent *bev, short what, void *arg)
 {
 	struct client *client = (struct client *)arg;
 
+	num_of_active_conn--;
 	if (what & BEV_EVENT_EOF) {
 		/* Client disconnected, remove the read event and the
 		 * free the client structure. */
 		//printf("Client disconnected.\n");
-		LOG(LOG_ERR,"%s","Client disconnected.")
+		LOG(LOG_INFO,"Client disconnected. num of remaining clients: %d",num_of_active_conn)
 	}
 	else {
-		LOG(LOG_WARNING,"%s","Client socket error, disconnecting.");
+		LOG(LOG_ERR,"Client socket error, disconnecting. num of remaining clients: %d",num_of_active_conn);
 	}
 
 	/* Remove the client from the tailq. */
@@ -156,8 +159,9 @@ on_accept(int fd, short ev, void *arg)
 	/* Add the new client to the tailq. */
 	TAILQ_INSERT_TAIL(&client_tailq_head, client, entries);
 
-	printf("Accepted connection from %s\n", 
-	    inet_ntoa(client_addr.sin_addr));
+	num_of_active_conn++;
+	LOG(LOG_INFO,"Accepted connection from %s, num of clients: %d", 
+	    inet_ntoa(client_addr.sin_addr),num_of_active_conn);
 }
 
 int

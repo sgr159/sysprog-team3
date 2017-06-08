@@ -1,0 +1,150 @@
+2017-06-07 01:03:24 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 01:03:25 : pkt_handlers.c:53:cust_order_handler(): received order 1
+2017-06-07 01:03:25 : pkt_handlers.c:107:cust_order_handler(): None of your orders are serviceable right now
+2017-06-07 01:03:25 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 01:03:25 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 01:06:03 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 01:06:04 : pkt_handlers.c:53:cust_order_handler(): received order 1
+2017-06-07 01:06:04 : pkt_handlers.c:107:cust_order_handler(): None of your orders are serviceable right now
+2017-06-07 01:06:04 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 01:06:04 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 01:07:12 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 01:07:13 : pkt_handlers.c:53:cust_order_handler(): received order 1
+2017-06-07 01:07:13 : pkt_handlers.c:107:cust_order_handler(): None of your orders are serviceable right now
+2017-06-07 01:07:13 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 01:07:13 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 01:08:35 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 01:08:36 : pkt_handlers.c:53:cust_order_handler(): received order 1
+2017-06-07 01:08:36 : pkt_handlers.c:107:cust_order_handler(): None of your orders are serviceable right now
+2017-06-07 01:08:36 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 01:08:36 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 01:09:57 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 01:09:58 : pkt_handlers.c:53:cust_order_handler(): received order 1
+2017-06-07 01:09:58 : pkt_handlers.c:107:cust_order_handler(): None of your orders are serviceable right now
+2017-06-07 01:09:58 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 01:09:58 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 01:11:09 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 01:11:10 : pkt_handlers.c:53:cust_order_handler(): received order 1
+2017-06-07 01:11:10 : pkt_handlers.c:107:cust_order_handler(): None of your orders are serviceable right now
+2017-06-07 01:11:10 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 01:11:10 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 01:14:06 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 01:14:07 : pkt_handlers.c:53:cust_order_handler(): received order 1
+2017-06-07 01:14:07 : pkt_handlers.c:107:cust_order_handler(): message sent to client: None of your orders are serviceable right now
+2017-06-07 01:14:07 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 01:14:07 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 01:14:27 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 01:14:29 : pkt_handlers.c:24:reg_cook_handler(): capability added 1
+2017-06-07 01:14:29 : pkt_handlers.c:24:reg_cook_handler(): capability added 2
+2017-06-07 01:14:29 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 01:14:41 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 2
+2017-06-07 01:14:43 : pkt_handlers.c:53:cust_order_handler(): received order 1
+2017-06-07 01:14:43 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 01:14:59 : server.c:88:buffered_on_read(): Received packet type: COOK_UPDATE
+2017-06-07 01:14:59 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 1
+2017-06-07 01:15:09 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 01:19:12 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 01:19:14 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 01:19:14 : pkt_handlers.c:25:reg_cook_handler(): capability added 1
+2017-06-07 01:19:14 : pkt_handlers.c:25:reg_cook_handler(): capability added 2
+2017-06-07 01:19:14 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 01:19:21 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 2
+2017-06-07 01:19:24 : pkt_handlers.c:54:cust_order_handler(): received order 2
+2017-06-07 01:19:24 : pkt_handlers.c:116:cust_order_handler(): client orders assigned
+2017-06-07 01:19:24 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 01:19:33 : pkt_handlers.c:190:cook_update_handler(): client orders complete
+2017-06-07 01:19:33 : server.c:88:buffered_on_read(): Received packet type: COOK_UPDATE
+2017-06-07 01:19:33 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 1
+2017-06-07 21:44:30 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 21:44:32 : pkt_handlers.c:54:cust_order_handler(): received order 1
+2017-06-07 21:44:32 : pkt_handlers.c:54:cust_order_handler(): received order 2
+2017-06-07 21:44:32 : pkt_handlers.c:108:cust_order_handler(): Order unsuccessful, message sent to client: None of your orders are serviceable right now
+2017-06-07 21:44:32 : pkt_handlers.c:116:cust_order_handler(): client orders assigned
+2017-06-07 21:44:32 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 21:44:32 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 21:45:58 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 21:46:00 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 21:46:00 : pkt_handlers.c:25:reg_cook_handler(): capability added 1
+2017-06-07 21:46:00 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 21:46:07 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 2
+2017-06-07 21:46:09 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 21:46:09 : pkt_handlers.c:25:reg_cook_handler(): capability added 2
+2017-06-07 21:46:09 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 21:46:16 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 3
+2017-06-07 21:46:18 : pkt_handlers.c:54:cust_order_handler(): received order 1
+2017-06-07 21:46:18 : pkt_handlers.c:54:cust_order_handler(): received order 2
+2017-06-07 21:46:18 : pkt_handlers.c:84:cust_order_handler(): client orders assigned
+2017-06-07 21:46:18 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 21:46:31 : server.c:88:buffered_on_read(): Received packet type: COOK_UPDATE
+2017-06-07 21:46:40 : pkt_handlers.c:191:cook_update_handler(): client orders complete
+2017-06-07 21:46:40 : server.c:88:buffered_on_read(): Received packet type: COOK_UPDATE
+2017-06-07 21:46:40 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 2
+2017-06-07 22:00:45 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 22:00:45 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 22:00:45 : pkt_handlers.c:25:reg_cook_handler(): capability added 1
+2017-06-07 22:00:45 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 22:00:45 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 2
+2017-06-07 22:00:45 : pkt_handlers.c:54:cust_order_handler(): received order 1
+2017-06-07 22:00:45 : pkt_handlers.c:84:cust_order_handler(): client orders assigned
+2017-06-07 22:00:45 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 22:00:45 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 3
+2017-06-07 22:00:45 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 22:00:45 : pkt_handlers.c:25:reg_cook_handler(): capability added 1
+2017-06-07 22:00:45 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 22:00:45 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 4
+2017-06-07 22:00:45 : pkt_handlers.c:54:cust_order_handler(): received order 1
+2017-06-07 22:00:45 : pkt_handlers.c:84:cust_order_handler(): client orders assigned
+2017-06-07 22:00:45 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 22:00:45 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 5
+2017-06-07 22:00:45 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 22:00:45 : pkt_handlers.c:25:reg_cook_handler(): capability added 1
+2017-06-07 22:00:45 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 22:00:45 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 6
+2017-06-07 22:00:46 : pkt_handlers.c:54:cust_order_handler(): received order 1
+2017-06-07 22:00:46 : pkt_handlers.c:84:cust_order_handler(): client orders assigned
+2017-06-07 22:00:46 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 22:00:46 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 7
+2017-06-07 22:00:46 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 22:00:46 : pkt_handlers.c:25:reg_cook_handler(): capability added 1
+2017-06-07 22:00:46 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 22:00:46 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 8
+2017-06-07 22:00:46 : pkt_handlers.c:54:cust_order_handler(): received order 1
+2017-06-07 22:00:46 : pkt_handlers.c:84:cust_order_handler(): client orders assigned
+2017-06-07 22:00:46 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 22:00:46 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 9
+2017-06-07 22:00:46 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 22:00:46 : pkt_handlers.c:25:reg_cook_handler(): capability added 1
+2017-06-07 22:00:46 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 22:00:46 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 10
+2017-06-07 22:00:46 : pkt_handlers.c:54:cust_order_handler(): received order 1
+2017-06-07 22:00:46 : pkt_handlers.c:84:cust_order_handler(): client orders assigned
+2017-06-07 22:00:46 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 22:00:52 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 9
+2017-06-07 22:00:52 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 8
+2017-06-07 22:00:52 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 7
+2017-06-07 22:00:53 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 6
+2017-06-07 22:00:53 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 5
+2017-06-07 22:00:53 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 4
+2017-06-07 22:00:53 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 3
+2017-06-07 22:00:53 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 2
+2017-06-07 22:00:53 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 1
+2017-06-07 22:00:53 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
+2017-06-07 22:58:09 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 1
+2017-06-07 22:58:23 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 22:58:23 : pkt_handlers.c:25:reg_cook_handler(): capability added 1
+2017-06-07 22:58:23 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 22:58:31 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 2
+2017-06-07 22:58:33 : pkt_handlers.c:20:reg_cook_handler(): cook registered
+2017-06-07 22:58:33 : pkt_handlers.c:25:reg_cook_handler(): capability added 2
+2017-06-07 22:58:33 : server.c:88:buffered_on_read(): Received packet type: REG_COOK
+2017-06-07 22:58:41 : server.c:164:on_accept(): Accepted connection from 127.0.0.1, num of clients: 3
+2017-06-07 22:58:43 : pkt_handlers.c:54:cust_order_handler(): received order 1
+2017-06-07 22:58:43 : pkt_handlers.c:54:cust_order_handler(): received order 2
+2017-06-07 22:58:43 : pkt_handlers.c:84:cust_order_handler(): client orders assigned
+2017-06-07 22:58:43 : server.c:88:buffered_on_read(): Received packet type: CUST_ORDER
+2017-06-07 22:58:56 : server.c:88:buffered_on_read(): Received packet type: COOK_UPDATE
+2017-06-07 22:59:05 : pkt_handlers.c:191:cook_update_handler(): client orders complete
+2017-06-07 22:59:05 : server.c:88:buffered_on_read(): Received packet type: COOK_UPDATE
+2017-06-07 22:59:05 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 2
+2017-06-07 23:01:54 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 1
+2017-06-07 23:01:56 : server.c:108:buffered_on_error(): Client disconnected. num of remaining clients: 0
