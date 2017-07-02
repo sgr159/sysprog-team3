@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <event2/bufferevent.h>
 
 #include "std_defs.h"
@@ -10,7 +11,7 @@
 
 #ifdef SERVER
 extern TAILQ_HEAD(, client) client_tailq_head;
-#endif
+extern pthread_mutex_t client_q_mutex;
 
 PKT_HNDL_FUNC(reg_cook)
 {
@@ -36,7 +37,6 @@ PKT_HNDL_FUNC(reg_customer)
 
 PKT_HNDL_FUNC(cust_order)
 {
-#ifdef SERVER
 	struct client * client = (struct client *) arg;
 	if(UNKNOWN == client->state)
 		client->state = CUSTOMER;
@@ -57,6 +57,7 @@ PKT_HNDL_FUNC(cust_order)
 	struct client * client_item;
 	int orders_assigned = 0;
 	struct pkt_t outpkt;
+	pthread_mutex_lock(&client_q_mutex);
 	TAILQ_FOREACH(client_item, &client_tailq_head, entries) {
 		if (client_item->state == COOK_FREE) {
 			client_item->assigned_client = client;
@@ -86,6 +87,8 @@ PKT_HNDL_FUNC(cust_order)
 			}
 		}
 	}
+	pthread_mutex_unlock(&client_q_mutex);
+
 	if(!(client->num_of_orders == orders_assigned)) {
 		char customer_msg[64];
 		if(orders_assigned == 0)
@@ -115,53 +118,24 @@ PKT_HNDL_FUNC(cust_order)
 		outpkt.u.cust_update_pkt = update_pkt;
 		bufferevent_write(client->buf_ev, &outpkt,  sizeof(outpkt));
 	}
-#endif
 	return 0;
-}
-
-PKT_HNDL_FUNC(cook_order)
-{
-	int sockfd = *(int *)(arg);
-	struct pkt_t pkt; 
-	memset(&pkt,0,sizeof(pkt_t)); 
-	printf("orders recieved : ");
-	for(int i=0;i<MENU_ARR_SIZE;i++)
-	{
-		if(pkt_data->orders[i] == ASSIGNED)
-			printf("%d ",i);
-	}
-	printf("\n press enter when your orders are ready.");
-	pkt.type = COOK_UPDATE;
-	fgets (pkt.u.cook_update_pkt.message, sizeof(pkt.u.cook_update_pkt.message)-1, stdin);
-	pkt.size = sizeof(pkt.u.cook_update_pkt);
-	write(sockfd, &pkt, sizeof(pkt_t));
-	return 0;
-}
-
-PKT_HNDL_FUNC(cust_update)
-{
-	printf("Message for you: %s\n",pkt_data->message);
-	if(strcmp(pkt_data->message,ORDER_COMPLETE_MESSAGE)==0)
-		return 0;
-	if(strcmp(pkt_data->message,ORDER_UNSERV_MESSAGE)==0)
-		return 0;
-	return 1;
 }
 
 PKT_HNDL_FUNC(cook_update)
 {
-#ifdef SERVER
 	struct client * client = (struct client *) arg;
 	struct client * client_item;
 	struct pkt_t outpkt;
 	struct cust_update_pkt_t update_pkt;
 	int customer_exists = 0;
+	pthread_mutex_lock(&client_q_mutex);
 	TAILQ_FOREACH(client_item, &client_tailq_head, entries) {
 		if(client_item == client->assigned_client){
 			customer_exists = 1;
 			break;
 		}
 	}
+	pthread_mutex_unlock(&client_q_mutex);
 	if(!customer_exists)
 	{
 		LOG(LOG_ERR,"%s","attempt to give an update to a non existing customer")
@@ -192,6 +166,36 @@ PKT_HNDL_FUNC(cook_update)
 		//TODO: delete client
 	}
 	client->state = COOK_FREE;
-#endif
 	return 0;
 }
+#endif
+
+PKT_HNDL_FUNC(cook_order)
+{
+	int sockfd = *(int *)(arg);
+	struct pkt_t pkt; 
+	memset(&pkt,0,sizeof(pkt_t)); 
+	printf("orders recieved : ");
+	for(int i=0;i<MENU_ARR_SIZE;i++)
+	{
+		if(pkt_data->orders[i] == ASSIGNED)
+			printf("%d ",i);
+	}
+	printf("\n press enter when your orders are ready.");
+	pkt.type = COOK_UPDATE;
+	fgets (pkt.u.cook_update_pkt.message, sizeof(pkt.u.cook_update_pkt.message)-1, stdin);
+	pkt.size = sizeof(pkt.u.cook_update_pkt);
+	write(sockfd, &pkt, sizeof(pkt_t));
+	return 0;
+}
+
+PKT_HNDL_FUNC(cust_update)
+{
+	printf("Message for you: %s\n",pkt_data->message);
+	if(strcmp(pkt_data->message,ORDER_COMPLETE_MESSAGE)==0)
+		return 0;
+	if(strcmp(pkt_data->message,ORDER_UNSERV_MESSAGE)==0)
+		return 0;
+	return 1;
+}
+

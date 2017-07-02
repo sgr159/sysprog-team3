@@ -5,8 +5,8 @@ LIBS =		$(LIBEVENT)/.libs/libevent.a -lrt
 
 all: server cook-client client
 
-server: server.c pkt_handlers.c logging.c
-	$(CC) $(CFLAGS) -g -o $@ $^ $(LIBS) -DSERVER=1
+server: server.c pkt_handlers.c logging.c thpool.c
+	$(CC) $(CFLAGS) -g -pthread -o $@ $^ $(LIBS) -DSERVER=1 -D THPOOL_DEBUG 
 client: client.c pkt_handlers.c logging.c
 	$(CC) $(CFLAGS) -g -o $@ $^ $(LIBS)
 cook-client: cook-client.c pkt_handlers.c logging.c

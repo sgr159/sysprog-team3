@@ -5,6 +5,7 @@
 #include "queue.h"
 
 #define MAX_MENU_ITEMS 10
+#define THREADPOOL_SIZE 10
 #define ORDER_UNSERV_MESSAGE "None of your orders are serviceable right now"
 #define ORDER_COMPLETE_MESSAGE "All orders processed, Enjoy your meal!"
 #define MENU_ARR_SIZE ((MAX_MENU_ITEMS/32)+1)*32
@@ -183,6 +184,11 @@ struct pkt_t
 };
 typedef struct pkt_t pkt_t;
 
+typedef struct
+{
+	pkt_t * pkt_data;
+	void * arg; 
+} job_data_t;
 /*
  * handler function declarations
  */
@@ -191,7 +197,12 @@ typedef struct pkt_t pkt_t;
 #undef _
 
 #define _(V,v) PKT_HNDL_FUNC(v);
-foreach_pkt_type
+#ifdef SERVER
+foreach_server_pkt_type
+#else
+foreach_cook_pkt_type
+foreach_client_pkt_type
+#endif
 
 typedef struct menu_item menu_item;
 

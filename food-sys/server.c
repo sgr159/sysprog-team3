@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <err.h>
+#include <pthread.h>
 
 /* On some systems (OpenBSD/NetBSD/FreeBSD) you could include
  * <sys/queue.h>, but for portability we'll include the local copy. */
@@ -20,6 +21,7 @@
 #include "constants.h"
 #include "std_defs.h"
 #include "logging.h"
+#include "thpool.h"
 
 /* Libevent. */
 #include <event2/event.h>
@@ -40,6 +42,9 @@ static int num_of_active_conn = 0;
  */
 TAILQ_HEAD(, client) client_tailq_head;
 
+pthread_mutex_t client_q_mutex;
+
+threadpool thpool;
 
 /**
  * Set a socket to non-blocking mode.
@@ -59,6 +64,26 @@ setnonblock(int fd)
 	return 0;
 }
 
+void
+handler_func_dispatch(void * arg)
+{
+job_data_t * job_data = (job_data_t *) arg;
+#undef _
+#define _(V,v)											\
+	case V:											\
+	v##_handler((v##_pkt_t *) &(job_data->pkt_data->u.v##_pkt),job_data->arg);		\
+	LOG(LOG_DEBUG,"%s"#V,"Received packet type: ")						\
+	break;
+	
+	switch(job_data->pkt_data->type)
+	{
+		foreach_server_pkt_type
+		default:
+		LOG(LOG_WARNING,"%s %d","Received unknown packet type:",job_data->pkt_data->type)
+	}
+
+}
+
 /**
  * Called by libevent when there is data to read.
  */
@@ -74,21 +99,10 @@ buffered_on_read(struct bufferevent *bev, void *arg)
 		LOG(LOG_ERR,"%s","n <=0 in %s");
 		return;
 	}
-	pkt_t * inpkt = (pkt_t *) data;
-
-#undef _
-#define _(V,v)											\
-	case V:											\
-	v##_handler((v##_pkt_t *) &(inpkt->u.v##_pkt),arg);					\
-	LOG(LOG_DEBUG,"%s"#V,"Received packet type: ")						\
-	break;
-	
-	switch(inpkt->type)
-	{
-		foreach_server_pkt_type
-	}
-	//bufferevent_write(client->buf_ev, "order ack!",  n);
-
+	job_data_t * job_data = (job_data_t *) malloc(sizeof(job_data_t));
+	job_data->pkt_data = (pkt_t *) data;
+	job_data->arg = arg;
+	thpool_add_work(thpool,handler_func_dispatch,(void *)job_data);
 }
 
 /**
@@ -112,7 +126,9 @@ buffered_on_error(struct bufferevent *bev, short what, void *arg)
 	}
 
 	/* Remove the client from the tailq. */
+	pthread_mutex_lock(&client_q_mutex);
 	TAILQ_REMOVE(&client_tailq_head, client, entries);
+	pthread_mutex_unlock(&client_q_mutex);
 
 	bufferevent_free(client->buf_ev);
 	close(client->fd);
@@ -157,7 +173,9 @@ on_accept(int fd, short ev, void *arg)
 	bufferevent_enable(client->buf_ev, EV_READ);
 
 	/* Add the new client to the tailq. */
+	pthread_mutex_lock(&client_q_mutex);
 	TAILQ_INSERT_TAIL(&client_tailq_head, client, entries);
+	pthread_mutex_unlock(&client_q_mutex);
 
 	num_of_active_conn++;
 	LOG(LOG_INFO,"Accepted connection from %s, num of clients: %d", 
@@ -174,9 +192,13 @@ main(int argc, char **argv)
 	syslog_init();
 	/* Initialize libevent. */
         evbase = event_base_new();
+	
+	/* Initialize threadpool */
+	thpool = thpool_init(THREADPOOL_SIZE);
 
 	/* Initialize the tailq. */
 	TAILQ_INIT(&client_tailq_head);
+	pthread_mutex_init(&client_q_mutex, NULL);
 
 	/* Create our listening socket. */
 	listen_fd = socket(AF_INET, SOCK_STREAM, 0);
